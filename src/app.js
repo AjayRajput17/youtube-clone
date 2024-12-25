@@ -24,11 +24,24 @@ app.use(express.urlencoded({
     limit: "16kb",
 }));
 
+
 app.use(express.static("public"));
 app.use(cookieParser());
 
 // Routes
 app.use("/api/v1/users",userRouter);
+
+
+app.get("/test", (req, res) => {
+    res.status(200).send("Test route works!");
+});
+
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    res.status(404).json({
+        error: "Resource not found",
+    });
+});
 
 
 // Example: http://localhost:8080/api/v1/users/register
