@@ -26,6 +26,7 @@ app.use(express.urlencoded({
 
 
 app.use(express.static("public"));
+
 app.use(cookieParser());
 
 // Routes
@@ -39,7 +40,7 @@ app.get("/test", (req, res) => {
 app.use((req, res, next) => {
     console.log(`Incoming request: ${req.method} ${req.url}`);
     res.status(404).json({
-        error: "Resource not found",
+        error: "Resource not found (route not match)",
     });
 });
 
