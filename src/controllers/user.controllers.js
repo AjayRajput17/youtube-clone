@@ -191,8 +191,13 @@ const logoutUser = asyncHandler(async(req,res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken : undefined
+            // $set: {
+            //     refreshToken : undefined     // somethime it can cause an error
+            // }
+
+            $unset:{
+                refreshToken: 1  // this remove fields from document
+
             }
         },
 
@@ -378,8 +383,8 @@ const updateUserCoverImage = asyncHandler(async(req,res) => {
 
 
  const getUserChannelProfile = asyncHandler(async(req,res)=> {
-    const { username } = req.param
-
+    const { username } = req.params
+    console.log(username)
     if(!username?.trim()){
         throw new ApiError(401,"username is missing")
     }
@@ -412,7 +417,7 @@ const updateUserCoverImage = asyncHandler(async(req,res) => {
                     $size: "$subscribers"
                 },
                 channelsSubscribedToCount: {
-                    $size: "subscribedTo"
+                    $size: "$subscribedTo"
                 },
                 isSubscribed: {
                     $cond: {

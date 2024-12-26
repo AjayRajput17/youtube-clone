@@ -48,6 +48,7 @@ router.route("/update-coverImage").patch(
     updateUserCoverImage
 );
 
+// debug required - api not work now
 router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
 
 router.route("/history").get(verifyJWT,getWatchHistory)
