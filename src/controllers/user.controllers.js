@@ -4,6 +4,7 @@ import { User} from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 const generateAccesAndRefeshToken = async (userId) => 
 {
@@ -214,10 +215,11 @@ const logoutUser = asyncHandler(async(req,res) => {
 
 const refreshAccessToken = asyncHandler(async(req,res)=>{
     try {
-        const inComingRefreshToken = req.cookies.refreshToken || req.boby.refreshToken
-
-        if (inComingRefreshToken) {
-            throw new ApiError(401, "unathorized request")
+        
+        const inComingRefreshToken = req.cookies?.refreshToken || req.boby.refreshToken
+        
+        if (!inComingRefreshToken) {
+            throw new ApiError(401, "unathorized request token not found in request")
         }
 
         const decodedToken = jwt.verify(
