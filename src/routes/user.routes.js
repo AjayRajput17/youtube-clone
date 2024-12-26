@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { registerUser, loginUser, logoutUser , refreshAccessToken, changeCurrentPassword, getCurrentUser,updateAccountDetails, 
- updateUserAvatar, updateUserCoverImage } from "../controllers/user.controllers.js";
+ updateUserAvatar, updateUserCoverImage, getUserChannelProfile,getWatchHistory  } from "../controllers/user.controllers.js";
 import { upload } from "../middlewares/multer.middlewares.js";
 import { verifyJWT } from "../middlewares/auth.middlewares.js"
 const router = Router();
@@ -32,18 +32,25 @@ router.route("/change-password").post( verifyJWT,changeCurrentPassword)
 
 router.route("/get-user-details").get(verifyJWT,getCurrentUser)
 
-router.route("/update-details").post(verifyJWT,updateAccountDetails)
+router.route("/update-details").patch(verifyJWT,updateAccountDetails)
+// patch - bcoz only one or two fields are updated
 
-router.route("/update-avatar").post(
-    upload.single("avatar"), // Correct way to specify a single file upload
+router.route("/update-avatar").patch(
     verifyJWT,
+    upload.single("avatar"), // Correct way to specify a single file upload
     updateUserAvatar
 );
 
 
-router.route("/update-coverImage").post(
+router.route("/update-coverImage").patch(
+    verifyJWT,
     upload.single("coverImage"),
-    verifyJWT,updateUserCoverImage)
+    updateUserCoverImage
+);
+
+router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
+
+router.route("/history").get(verifyJWT,getWatchHistory)
 
 
 export default router;
